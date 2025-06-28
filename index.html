@@ -1,0 +1,540 @@
+<h1>Bienvenue sur mon site :)</h1>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mon site de vente</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f0f0f0;
+    }
+    header {
+      background: #4CAF50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .product {
+      background: white;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 6px;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bienvenue sur mon site de vente</h1>
+</header>
+
+<section class="product">
+  <h2>Produit 1</h2>
+  <p>Super produit à 20€</p>
+  <button onclick="ajouterAuPanier('Produit 1')">Ajouter au panier</button>
+</section>
+
+<section class="product">
+  <h2>Produit 2</h2>
+  <p>Autre produit à 30€</p>
+  <button onclick="ajouterAuPanier('Produit 2')">Ajouter au panier</button>
+</section>
+
+<script>
+  function ajouterAuPanier(nomProduit) {
+    alert(nomProduit + ' a été ajouté au panier !');
+  }
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mini boutique en ligne</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    header { text-align: center; padding: 20px; background: #2a9d8f; color: white; }
+    .container { display: flex; gap: 40px; }
+    .products, .cart { background: white; padding: 20px; border-radius: 8px; flex: 1; }
+    .product { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    button { background: #2a9d8f; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    h2 { border-bottom: 2px solid #2a9d8f; padding-bottom: 10px; }
+    .cart-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Ma Mini Boutique</h1>
+</header>
+
+<div class="container">
+
+  <div class="products">
+    <h2>Produits</h2>
+    <div id="product-list"></div>
+  </div>
+
+  <div class="cart">
+    <h2>Panier</h2>
+    <div id="cart-list">Votre panier est vide</div>
+    <h3>Total : <span id="total-price">0</span> €</h3>
+    <button id="checkout-btn" disabled>Passer la commande</button>
+  </div>
+
+</div>
+
+<script>
+  // Exemple de produits
+  const products = [
+    {id: 1, name: 'T-shirt Cool', price: 15},
+    {id: 2, name: 'Casquette Stylée', price: 12},
+    {id: 3, name: 'Sweat à capuche', price: 30}
+  ];
+
+  const productListEl = document.getElementById('product-list');
+  const cartListEl = document.getElementById('cart-list');
+  const totalPriceEl = document.getElementById('total-price');
+  const checkoutBtn = document.getElementById('checkout-btn');
+
+  // Panier stocké ici
+  let cart = {};
+
+  // Afficher la liste des produits
+  function renderProducts() {
+    productListEl.innerHTML = '';
+    products.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `<strong>${p.name}</strong> - ${p.price} € 
+        <button onclick="addToCart(${p.id})">Ajouter</button>`;
+      productListEl.appendChild(div);
+    });
+  }
+
+  // Ajouter au panier
+  function addToCart(id) {
+    if(cart[id]) {
+      cart[id].qty++;
+    } else {
+      const prod = products.find(p => p.id === id);
+      cart[id] = { ...prod, qty: 1 };
+    }
+    renderCart();
+  }
+
+  // Supprimer un article
+  function removeFromCart(id) {
+    if(cart[id]) {
+      cart[id].qty--;
+      if(cart[id].qty <= 0) {
+        delete cart[id];
+      }
+      renderCart();
+    }
+  }
+
+  // Afficher le panier
+  function renderCart() {
+    cartListEl.innerHTML = '';
+    let total = 0;
+    const keys = Object.keys(cart);
+    if(keys.length === 0) {
+      cartListEl.textContent = 'Votre panier est vide';
+      checkoutBtn.disabled = true;
+      totalPriceEl.textContent = '0';
+      return;
+    }
+    keys.forEach(id => {
+      const item = cart[id];
+      total += item.price * item.qty;
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `
+        <span>${item.name} x ${item.qty}</span>
+        <span>
+          ${item.price * item.qty} €
+          <button onclick="removeFromCart(${id})">-</button>
+        </span>
+      `;
+      cartListEl.appendChild(div);
+    });
+    totalPriceEl.textContent = total.toFixed(2);
+    checkoutBtn.disabled = false;
+  }
+
+  // Action passer la commande
+  checkoutBtn.onclick = function() {
+    alert('Commande passée ! Merci.');
+    cart = {};
+    renderCart();
+  }
+
+  renderProducts();
+  renderCart();
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ma boutique</title>
+  <style>
+    body { font-family: Arial; margin: 0; padding: 0; }
+    header { background: #000; color: #fff; text-align: center; padding: 1rem; }
+    .produits { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; padding: 1rem; }
+    .produit { border: 1px solid #ccc; padding: 1rem; text-align: center; border-radius: 8px; }
+    .produit img { width: 100px; height: 100px; }
+    .panier { padding: 1rem; background: #f0f0f0; }
+    button { background-color: #28a745; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #218838; }
+  </style>
+</head>
+<body>
+  <header><h1>Bienvenue sur ma boutique</h1></header>
+
+  <div class="produits" id="listeProduits"></div>
+
+  <div class="panier">
+    <h2>Panier</h2>
+    <ul id="panierListe"></ul>
+    <p><strong>Total:</strong> $<span id="total">0</span></p>
+  </div>
+
+  <script>
+    const produits = [
+      { id: 1, nom: "T-shirt", prix: 15.99, image: "https://via.placeholder.com/100" },
+      { id: 2, nom: "Casquette", prix: 10.99, image: "https://via.placeholder.com/100" },
+      { id: 3, nom: "Chaussures", prix: 49.99, image: "https://via.placeholder.com/100" }
+    ];
+
+    const listeProduits = document.getElementById("listeProduits");
+    const panierListe = document.getElementById("panierListe");
+    const total = document.getElementById("total");
+    let panier = [];
+
+    produits.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "produit";
+      div.innerHTML = `
+        <img src="${p.image}" alt="${p.nom}" />
+        <h3>${p.nom}</h3>
+        <p>${p.prix} €</p>
+        <button onclick="ajouter(${p.id})">Ajouter</button>
+      `;
+      listeProduits.appendChild(div);
+    });
+
+    function ajouter(id) {
+      const prod = produits.find(p => p.id === id);
+      panier.push(prod);
+      afficherPanier();
+    }
+
+    function afficherPanier() {
+      panierListe.innerHTML = "";
+      let somme = 0;
+      panier.forEach(p => {
+        const li = document.createElement("li");
+        li.textContent = `${p.nom} - ${p.prix} €`;
+        panierListe.appendChild(li);
+        somme += p.prix;
+      });
+      total.textContent = somme.toFixed(2);
+    }
+  </script>
+</body>
+</html>
+{
+  name: "Sac en cuir moderne",
+  price: 49.99,
+  image: "https://exemple.com/sac.jpg"
+}
+<div class="bg-yellow-100 p-4 rounded-xl text-center">
+  <p class="text-lg font-semibold">Paiement par Solimi</p>
+  <p>Envoyez le montant total à ce numéro :</p>
+  <p class="font-bold text-xl text-green-600">+228 99 99 52 19</p>
+  <p class="text-sm mt-2">Après le paiement, envoyez une capture d’écran à notre WhatsApp pour valider votre commande.</p>
+</div>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique en Ligne</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
+    header { background: #333; color: #fff; padding: 1rem; text-align: center; }
+    .container { padding: 2rem; max-width: 800px; margin: auto; background: #fff; }
+    .product { display: flex; flex-direction: column; align-items: center; }
+    .product img { max-width: 200px; }
+    .product h2, .product p, .product span { margin: 0.5rem 0; }
+    .cart { margin-top: 2rem; border-top: 1px solid #ccc; padding-top: 1rem; }
+    .cart-items { list-style: none; padding: 0; }
+    .cart-items li { margin: 0.5rem 0; }
+    footer { background: #222; color: #fff; text-align: center; padding: 1rem; margin-top: 2rem; }
+    button { padding: 0.5rem 1rem; margin-top: 1rem; background: #007BFF; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ma Boutique Futuriste</h1>
+  </header>
+
+  <div class="container">
+    <div class="product">
+      <img src="https://via.placeholder.com/200" alt="Produit">
+      <h2>Nom du Produit</h2>
+      <p>Description du produit avec ses caractéristiques principales.</p>
+      <span>Prix: 25 000 CFA</span>
+      <button onclick="addToCart()">Ajouter au panier</button>
+    </div>
+
+    <div class="cart">
+      <h3>Panier</h3>
+      <ul class="cart-items" id="cartItems"></ul>
+      <p id="total">Total: 0 CFA</p>
+    </div>
+
+    <h3>Moyens de Paiement</h3>
+    <p>Nous acceptons les paiements par carte Visa, Mobile Money, et <strong>Solimi</strong>.</p>
+  </div>
+
+  <footer>
+    &copy; 2025 Ma Boutique. Tous droits réservés.
+  </footer>
+
+  <script>
+    let total = 0;
+    let cart = [];
+
+    function addToCart() {
+      cart.push({ name: "Nom du Produit", price: 25000 });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById("cartItems");
+      cartItems.innerHTML = "";
+      total = 0;
+      cart.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - ${item.price} CFA`;
+        cartItems.appendChild(li);
+        total += item.price;
+      });
+      document.getElementById("total").textContent = `Total: ${total} CFA`;
+    }
+  </script>
+</body>
+</html>
+git init
+git remote add origin https://github.com/TON-NOM-UTILISATEUR/dka-site.git
+git add .
+git commit -m "Premier envoi du site DKA"
+git branch -M main
+git push -u origin main
+<script>
+  const panier = [];
+
+  function ajouterAuPanier(produit) {
+    panier.push(produit);
+    alert(produit + \" ajouté au panier !\");
+  }
+</script>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DKA - Marketplace</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f2f2f2;
+    }
+    header {
+      background: #000;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #333;
+    }
+    nav a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      display: block;
+    }
+    nav a:hover {
+      background: #575757;
+    }
+    .hero {
+      background: url('https://via.placeholder.com/1200x400') center/cover no-repeat;
+      color: white;
+      text-align: center;
+      padding: 100px 20px;
+    }
+    .section {
+      padding: 40px 20px;
+      background: white;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product {
+      background: #eee;
+      padding: 10px;
+      text-align: center;
+    }
+    .form-container {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-container input, .form-container select, .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .form-container button {
+      padding: 10px 20px;
+      background: #000;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background: #444;
+    }
+    footer {
+      background: #000;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">DKA</div>
+    <p>La marketplace où tout le monde peut acheter et vendre !</p>
+  </header>
+
+  <nav>
+    <a href="#">Accueil</a>
+    <a href="#boutique">Boutique</a>
+    <a href="#vendre">Vendre sur DKA</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="hero">
+    <h2>Tout ce que vous cherchez est ici</h2>
+    <p>Produits variés, vendeurs de partout, qualité garantie</p>
+  </div>
+
+  <div class="section" id="boutique">
+    <h2>Produits populaires</h2>
+    <div class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/150" alt="Produit 1">
+        <h3>Casque Bluetooth</h3>
+        <p>25,00 €</p>
+        <button>Ajouter au panier</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/150" alt="Produit 2">
+        <h3>Montre intelligente</h3>
+        <p>50,00 €</p>
+        <button>Ajouter au panier</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/150" alt="Produit 3">
+        <h3>T-shirt DKA</h3>
+        <p>15,00 €</p>
+        <button>Ajouter au panier</button>
+      </div>
+      <div class="product">
+        <img src="https://via.placeholder.com/150" alt="Produit 4">
+        <h3>Chaussures sport</h3>
+        <p>40,00 €</p>
+        <button>Ajouter au panier</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="vendre" style="background:#fafafa">
+    <h2>Vendez sur DKA</h2>
+    <p>Vous êtes vendeur ? Remplissez ce formulaire pour proposer vos produits.</p>
+    <div class="form-container">
+      <form>
+        <input type="text" placeholder="Nom complet" required>
+        <input type="email" placeholder="Adresse e-mail" required>
+        <input type="text" placeholder="Nom de votre boutique" required>
+        <select required>
+          <option value="">Catégorie de produit</option>
+          <option value="mode">Mode</option>
+          <option value="electronique">Électronique</option>
+          <option value="beauté">Beauté</option>
+          <option value="autre">Autre</option>
+        </select>
+        <textarea placeholder="Description ou message" rows="4"></textarea>
+        <button type="submit">Envoyer la demande</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="section" id="contact">
+    <h2>Contact & À propos</h2>
+    <p>Besoin d’aide ou d’informations ? Contactez-nous à <strong>support@dka.com</strong>.</p>
+    <p>DKA est une plateforme de commerce ouverte à tous. Achetez, vendez et développez votre activité en toute simplicité.</p>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 DKA Marketplace. Tous droits réservés.</p>
+  </footer>
+</body>
+</html>
+dka-site/
+README.md
+No description, website, or topics provided.
+git init
+git remote add origin https://github.com/TON-NOM-UTILISATEUR/dka-site.git
+git add .
+git commit -m "Initial commit"
+git push -u origin main
